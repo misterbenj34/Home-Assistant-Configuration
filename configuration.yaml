@@ -1,5 +1,5 @@
 homeassistant:
-  name: HomeB
+  name: Home
   latitude: !secret home_lat
   longitude: !secret home_long
   elevation: 20
