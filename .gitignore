@@ -1,0 +1,11 @@
+configuration.yaml.good
+.HA_VERSION
+.uuid
+home-assistant.log
+harmony_salon.conf
+OZW_Log.txt
+pyozw.sqlite
+zwscene.xml
+secrets.yaml
+home-assistant_v2.db
+zwcfg_0x0184f204.xml

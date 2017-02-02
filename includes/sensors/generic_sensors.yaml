@@ -1,0 +1,39 @@
+  - platform: darksky
+    api_key: 1ccc03bd3ff80b8d703a8ce58956ec57
+    monitored_conditions:
+      - summary
+      - icon
+      - precip_type
+      - precip_intensity
+      - precip_probability
+      - temperature
+      - apparent_temperature
+      - humidity
+
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+
+  - platform: sabnzbd
+    host: 192.168.1.12
+    api_key: 590923824019c4ddded0d5bb3bc9c7d9
+    monitored_variables:
+      - 'current_status'
+      - 'speed'
+      - 'queue_size'
+      - 'queue_remaining'
+      - 'disk_size'
+      - 'disk_free'
+
+  - platform: synologydsm
+    host: 192.168.1.12
+    username: admin
+    password: B9EA66BaS
+    monitored_conditions:
+      - cpu_total_load
+      - memory_real_usage
+      - network_up
+      - disk_smart_status
+      - disk_temp
+      - volume_percentage_used

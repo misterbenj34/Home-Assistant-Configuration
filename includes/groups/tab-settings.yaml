@@ -1,0 +1,38 @@
+settings:
+  name: Settings
+  view: yes
+  icon: mdi:settings
+  entities:
+    - group.links
+    - group.weather_auto
+    - group.cover_auto
+    - group.misc_auto
+
+
+
+
+links:
+  name: Links
+  entities:
+    - weblink.cookbook
+    - weblink.home_assistant
+    - weblink.icons
+    - weblink.router
+    - weblink.yamllint
+    - weblink.bah2830_yaml_example
+
+weather_auto:
+  name: Weather Automation
+  entities:
+    - automation.raining
+
+misc_auto:
+  name: Misc Automation
+  entities:
+    - automation.update_notifications
+
+cover_auto:
+  name: Cover Automation
+  entities:
+    - automation.cover_close_after_sunset
+    - automation.cover_open_after_sunrise

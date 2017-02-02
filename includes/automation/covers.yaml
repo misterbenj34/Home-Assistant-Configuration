@@ -1,0 +1,36 @@
+  - alias: 'Cover close after sunset'
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: '+00:45:00'
+    action:
+      - service: cover.close_cover
+        data:
+          entity_id: cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_4_0
+      - service: notify.nma
+        data:
+          title: 'Home Assistant'
+          message: 'Cover closed into the bedroom'
+
+
+  # - alias: 'Cover open after sunrise'
+    # trigger:
+      # - platform: sun
+        # event: sunrise
+    # condition:
+      # condition: time
+      # after: '08:00:00'
+      # weekday:
+        # - mon
+        # - tue
+        # - wed
+        # - thu
+        # - fri
+    # action:
+      # - service: cover.open_cover
+        # data:
+          # entity_id: cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_4_0
+      # - service: notify.nma
+        # data:
+          # title: 'Home Assistant'
+          # message: 'Cover opened into the bedroom'

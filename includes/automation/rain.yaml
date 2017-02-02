@@ -1,0 +1,19 @@
+  - alias: 'Raining'
+    trigger:
+      - platform: state
+        entity_id: sensor.dark_sky_precip
+        from: '0'
+    condition:
+      - condition: time
+        after: '07:00'
+        before: '09:30'
+    action:
+      - service: notify.nma
+        data:
+          title: 'Alerte Meteo'
+          message: 'Il va pleuvoir !'
+      - service: automation.turn_off
+        entity_id: automation.raining
+      - delay: 00:30:00
+      - service: automation.turn_on
+        entity_id: automation.raining

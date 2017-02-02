@@ -1,0 +1,15 @@
+family:
+  name: Family
+  entities:
+    - group.ben
+    - group.helene
+
+ben:
+  name: Ben
+  entities:
+    - device_tracker.opo3tben_oneplus3tben
+
+helene:
+  name: Helene
+  entities:
+    - device_tracker.opo3tln_oneplus3tln

@@ -1,0 +1,24 @@
+
+plsmzxhw_oneplus3tben:
+  hide_if_away: false
+  mac:
+  name: plsmzxhw
+  picture:
+  track: true
+  vendor:
+
+opo3tben_oneplus3tben:
+  hide_if_away: false
+  mac:
+  name: opo3t-ben
+  picture:
+  track: true
+  vendor:
+
+opo3tln_oneplus3tln:
+  hide_if_away: false
+  mac:
+  name: opo3t-ln
+  picture:
+  track: true
+  vendor:

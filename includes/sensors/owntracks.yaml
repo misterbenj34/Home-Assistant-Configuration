@@ -1,0 +1,13 @@
+- platform: mqtt
+  state_topic: "owntracks/opo3t-ben/oneplus3t-ben"
+  name: "Ben's Phone Battery"
+  qos: 0
+  unit_of_measurement: "%"
+  value_template: '{{ value_json.batt }}'
+
+- platform: mqtt
+  state_topic: "owntracks/opo3t-ln/oneplus3t-ln"
+  name: "Helene's Phone Battery"
+  qos: 0
+  unit_of_measurement: "%"
+  value_template: '{{ value_json.batt }}'

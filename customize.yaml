@@ -1,0 +1,77 @@
+# Covers
+cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_4_0:
+  friendly_name: Volet Chambre
+# cover.fibaro_system_fgrm222_roller_shutter_controller_2_switch_4_0:
+  # hidden: true
+cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_9_0:
+  friendly_name: Volet Salon
+# cover.fibaro_system_fgrm222_roller_shutter_controller_2_switch_9_0:
+  # hidden: true
+
+# Groups
+group.ben:
+  icon: mdi:arrow-down-bold
+group.helene:
+  icon: mdi:arrow-down-bold
+
+# Sensors
+sensor.aeotec_zw074_multisensor_gen5_temperature_10_1:
+  friendly_name: Temperature Salon
+  icon: mdi:thermometer
+sensor.aeotec_zw074_multisensor_gen5_relative_humidity_10_5:
+  friendly_name: Humidite Salon
+  icon: mdi:weather-rainy
+sensor.sabnzbd_status:
+  icon: mdi:download
+sensor.sabnzbd_disk:
+  icon: mdi:harddisk
+sensor.sabnzbd_disk_free:
+  icon: mdi:harddisk
+sensor.sabnzbd_left:
+  icon: mdi:playlist-play
+sensor.sabnzbd_queue:
+  icon: mdi:playlist-minus
+sensor.sabnzbd_speed:
+  icon: mdi:speedometer
+
+sensor.dark_sky_temperature:
+  friendly_name: "Temperature"
+sensor.dark_sky_summary:
+  friendly_name: "Summary"
+sensor.dark_sky_humidity:
+  friendly_name: "Humidity"
+sensor.dark_sky_precip:
+  friendly_name: "Precip Type"
+sensor.dark_sky_precip_probability:
+  friendly_name: "Precip Probability"
+sensor.bens_phone_battery:
+  icon: mdi:battery-charging-100
+sensor.helenes_phone_battery:
+  icon: mdi:battery-charging-100
+sensor.ben_location_to_home:
+  friendly_name: "Ben to Home ETA"
+  icon: mdi:run-fast
+sensor.helene_location_to_home:
+  friendly_name: "Helene to Home ETA"
+  icon: mdi:run-fast
+
+
+device_tracker.opo3tben_oneplus3tben:
+  friendly_name: "Ben"
+device_tracker.opo3tln_oneplus3tln:
+  friendly_name: "Helene"
+
+
+################
+# TAB ORDERING #
+################
+group.home:
+  order: 1
+group.salon:
+  order: 2
+group.chambre:
+  order: 3
+group.misc:
+  order: 4
+group.settings:
+  order: 5

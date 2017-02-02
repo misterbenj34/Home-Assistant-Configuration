@@ -1,0 +1,38 @@
+misc:
+  name: Misc
+  view: yes
+  icon: mdi:server-network
+  entities:
+    - group.bitcoin
+    - group.synology
+    - group.sabnzbd
+
+
+
+bitcoin:
+  name: Bitcoin
+  entities:
+    - sensor.exchange_rate_1_btc
+
+sabnzbd:
+  name: SABnzbd
+  entities:
+    - weblink.sickbeard
+    - weblink.sabnzbd
+    - sensor.sabnzbd_status
+    - sensor.sabnzbd_disk
+    - sensor.sabnzbd_disk_free
+    - sensor.sabnzbd_left
+    - sensor.sabnzbd_queue
+    - sensor.sabnzbd_speed
+
+synology:
+  name: NAS Synology
+  entities:
+    - weblink.nas
+    - sensor.cpu_load_total
+    - sensor.memory_usage_real
+    - sensor.network_up
+    - sensor.volume_used_volume_1
+    - sensor.status_smart_sda
+    - sensor.status_smart_sdb

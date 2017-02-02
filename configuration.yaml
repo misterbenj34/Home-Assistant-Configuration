@@ -1,0 +1,156 @@
+homeassistant:
+  name: Home
+  latitude: !secret home_lat
+  longitude: !secret home_long
+  elevation: 20
+  unit_system: metric
+  time_zone: Europe/Paris
+ 
+  customize: !include customize.yaml
+
+# This will override the default home zone
+zone:
+  name: Home
+  latitude: !secret home_lat
+  longitude: !secret home_long
+  radius: 300
+  icon: mdi:home
+
+zone 2:
+  name: Ben Work
+  latitude: 48.892359
+  longitude: 2.246744
+  radius: 300
+  icon: mdi:briefcase
+
+zone 3:
+  name: LN Work
+  latitude: 48.871952
+  longitude: 2.310942
+  radius: 200
+  icon: mdi:briefcase
+
+zone 4:
+  name: Creche
+  latitude: 48.820298
+  longitude: 2.202117
+  radius: 150
+  icon: mdi:robot
+
+
+############
+# INCLUDES #
+############
+group: !include_dir_merge_named includes/groups
+sensor: !include_dir_merge_list includes/sensors
+automation: !include_dir_merge_list includes/automation
+
+# Enables the frontend
+frontend:
+
+zwave:
+  usb_path: /dev/ttyUSB0
+  polling_interval: 60000
+  # debug: true
+
+mqtt:
+  broker: m20.cloudmqtt.com
+  port: 12788
+  client_id: home-assistant-1
+  keepalive: 60
+  # username: ha
+  username: plsmzxhw
+  password: !secret mqtt_password
+
+device_tracker:
+  - platform: owntracks
+
+camera:
+  - platform: generic
+    still_image_url: !secret camera_url
+    name: Home Camera
+
+
+http:
+  api_password: !secret http_password
+
+# Text to speech
+# tts:
+  # platform: google
+  # language: 'fr'
+
+# Notifications
+notify:
+  - name: NMA
+    platform: nma
+    api_key: !secret api_key_nma
+  - name: PushBullet
+    platform: pushbullet
+    api_key: !secret api_key_pushbullet
+
+media_player:
+  - platform: denonavr
+    host: 192.168.1.101
+  # - platform: kodi
+    # host: 192.168.1.15
+  - platform: cast
+
+remote:
+  - platform: harmony
+    name: Salon
+    host: 192.168.1.50
+
+weblink:
+  entities:
+    - name: Router
+      url: http://192.168.1.1/
+    - name: NAS
+      url: http://192.168.1.12:5000/
+    - name: SABnzbd
+      url: http://192.168.1.12:8080/
+    - name: SickBeard
+      url: http://192.168.1.12:8081/
+    - name: Home Assistant
+      url: https://home-assistant.io
+    - name: YAMLLINT
+      url: http://www.yamllint.com/
+    - name: CookBook
+      url: https://home-assistant.io/cookbook/
+    - name: Icons
+      url: http://materialdesignicons.com/
+    - name: BAH2830 YAML example
+      url: https://github.com/bah2830/Home-Assistant-Configs
+
+
+# ASUS RT68U
+# device_tracker:
+  # - platform: asuswrt
+    # host: 192.168.1.1
+    # username: !secret asus_login
+    # password: !secret asus_password
+    # interval_seconds: 10
+    # consider_home: 180
+    # track_new_devices: yes
+
+logbook:
+  exclude:
+    entities:
+      - sensor.dark_sky_daily_high_temperature
+      - sensor.dark_sky_daily_low_temperature
+      - sensor.dark_sky_humidity
+      - sensor.dark_sky_precip
+      - sensor.dark_sky_precip_probability
+      - sensor.dark_sky_summary
+      - sensor.dark_sky_temperature
+      - sensor.time
+      - group.family_info
+      - group.family
+
+# Checks for available updates
+updater:
+# Discover some devices automatically
+# discovery:
+# Enables support for tracking state changes over time.
+history:
+# View all events in a logbook
+sun:

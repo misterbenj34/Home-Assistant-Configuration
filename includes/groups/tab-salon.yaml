@@ -1,0 +1,27 @@
+salon:
+  name: Salon
+  view: yes
+  icon: mdi:sofa
+  entities:
+    - group.remote
+    - group.media_player
+    - group.volet_sa
+
+
+
+
+remote:
+  name: Telecommande
+  entities:
+    - remote.salon
+
+media_player:
+  name: Media Player
+  entities:
+    - media_player.home
+    - media_player.denon_avrx1300w
+
+volet_sa:
+  name: Volets
+  entities:
+   - cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_9_0

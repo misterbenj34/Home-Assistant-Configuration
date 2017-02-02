@@ -1,0 +1,13 @@
+chambre:
+  name: Chambre
+  view: yes
+  icon: mdi:hotel
+  entities:
+    - group.volet_ch
+
+
+
+volet_ch:
+  name: Volets
+  entities:
+   - cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_4_0
