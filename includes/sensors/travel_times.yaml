@@ -3,9 +3,29 @@
   api_key: AIzaSyCOqLHQ5v3VCS6TdQpDmoWYPZb2YUXyZC4
   origin: device_tracker.opo3tben_oneplus3tben
   destination: Home
+  options:
+    mode: transit
 
 - platform: google_travel_time
   name: Helene Location To Home
   api_key: AIzaSyCOqLHQ5v3VCS6TdQpDmoWYPZb2YUXyZC4
   origin: device_tracker.opo3tln_oneplus3tln
   destination: Home
+  options:
+    mode: transit
+
+- platform: google_travel_time
+  name: Ben Location To Home (by car)
+  api_key: AIzaSyCOqLHQ5v3VCS6TdQpDmoWYPZb2YUXyZC4
+  origin: device_tracker.opo3tben_oneplus3tben
+  destination: Home
+  options:
+    mode: driving
+
+- platform: google_travel_time
+  name: Helene Location To Home (by car)
+  api_key: AIzaSyCOqLHQ5v3VCS6TdQpDmoWYPZb2YUXyZC4
+  origin: device_tracker.opo3tln_oneplus3tln
+  destination: Home
+  options:
+    mode: driving

@@ -1,0 +1,12 @@
+alias: "Turn on lamp and set timer"
+sequence:
+  - service: script.turn_off
+    data:
+      entity_id: script.auto_light_corridor_timer
+  - service: light.turn_on
+    data:
+      entity_id: light.fibaro_system_fgd212_dimmer_2_level_14_0
+      brightness: 3
+  - service: script.turn_on
+    data:
+      entity_id: script.auto_light_corridor_timer

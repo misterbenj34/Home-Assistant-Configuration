@@ -1,0 +1,9 @@
+miplant:
+  entities:
+  - sensor.citronnier_temperature
+  - sensor.citronnier_moisture
+  - sensor.citronnier_light_intensity
+  - sensor.citronnier_conductivity
+  - sensor.citronnier_battery
+  name: Garden
+  view: false

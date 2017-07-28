@@ -1,0 +1,11 @@
+alias: Stop
+sequence:
+  - service: media_player.media_stop
+    data:
+      entity_id: media_player.home
+  - service: media_player.turn_off
+    data:
+      entity_id: media_player.denon_avrx1300w
+  - service: media_player.turn_off
+    data:
+      entity_id: media_player.home

@@ -1,0 +1,29 @@
+- alias: "Ben Leave work"
+  trigger:
+    - platform: zone
+      entity_id: device_tracker.opo3tben_oneplus3tben
+      zone: zone.la_defense
+      event: leave
+  condition:
+    - condition: time
+      after: '16:30:00'
+      before: '19:00:00'
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+  action:
+    - service: notify.PushBullet_Ben
+      data_template:
+        message: >
+          Benjamin is leaving work.
+          ETA: {{ states.sensor.ben_location_to_home.attributes.duration }}
+        title: 'Benjamin Leave Work'
+    - service: notify.PushBullet_LN
+      data_template:
+        message: >
+          Benjamin is leaving work.
+          ETA: {{ states.sensor.ben_location_to_home.attributes.duration }}
+        title: 'Benjamin Leave Work'

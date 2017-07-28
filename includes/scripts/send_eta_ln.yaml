@@ -1,0 +1,14 @@
+alias: "Send ETA LN"
+sequence:
+  - service: notify.PushBullet_Ben
+    data_template:
+      title: 'Helene is coming !'
+      message: >
+        Helene is leaving.
+        ETA: {{ states.sensor.helene_location_to_home_by_car.attributes.duration }}
+  - service: notify.PushBullet_LN
+    data_template:
+      title: 'Helene is coming !'
+      message: >
+        Helene is leaving.
+        ETA: {{ states.sensor.helene_location_to_home_by_car.attributes.duration }}

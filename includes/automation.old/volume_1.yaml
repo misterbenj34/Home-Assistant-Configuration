@@ -1,0 +1,9 @@
+- alias: living_room - Adjust Volume
+  trigger:
+    platform: state
+    entity_id: input_slider.volume_denon
+  action:
+    - service: media_player.volume_set
+      data_template:
+        entity_id: media_player.denon_avrx1300w
+        volume_level: '{{ trigger.to_state.state }}'

@@ -1,0 +1,57 @@
+  - alias: 'NAS volume surveillance'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.volume_used_volume_1
+        above: '90'
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'NAS volume surveillance'
+          message: '90% of the NAS volume is full'
+      - service: persistent_notification.create
+        data:
+          title: 'NAS volume surveillance'
+          message: '90% of the NAS volume is full'
+      - service: automation.turn_off
+        entity_id: automation.nas_volume_surveillance
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.nas_volume_surveillance
+
+  - alias: 'NAS HD #1 surveillance'
+    trigger:
+      - platform: template
+        value_template: "{% if not is_state('sensor.status_smart_sda', 'safe') %}true{% endif %}"
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'NAS HD #1 surveillance'
+          message: 'Synology report a defective hard drive #1 (SMART status)'
+      - service: persistent_notification.create
+        data:
+          title: 'NAS HD #1 surveillance'
+          message: 'Synology report a defective hard drive #1 (SMART status)'
+      - service: automation.turn_off
+        entity_id: automation.nas_hd_1_surveillance
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.nas_hd_1_surveillance
+
+  - alias: 'NAS HD #2 surveillance'
+    trigger:
+      - platform: template
+        value_template: "{% if not is_state('sensor.status_smart_sdb', 'safe') %}true{% endif %}"
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'NAS HD #2 surveillance'
+          message: 'Synology report a defective hard drive #2 (SMART status)'
+      - service: persistent_notification.create
+        data:
+          title: 'NAS HD #2 surveillance'
+          message: 'Synology report a defective hard drive #2 (SMART status)'
+      - service: automation.turn_off
+        entity_id: automation.nas_hd_2_surveillance
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.nas_hd_2_surveillance

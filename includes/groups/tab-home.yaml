@@ -2,40 +2,74 @@ default_view:
   view: yes
   icon: mdi:home
   entities:
+    # - sensor.dark_sky_summary
     - group.weather
     - group.family_info
     - group.home_condition
     - group.insidecam
+    # - group.zones
 
 
+weather:
+  name: Weather
+  entities:
+    #- sensor.dark_sky_temperature
+    #- sensor.dark_sky_humidity
+    - group.sub_weather
+    # - sensor.dark_sky_precip_probability
+    # - sensor.sunrise_time
+    # - sensor.sunset_time
 
 family_info:
   name: Family Info
   entities:
     # - group.ben
     - device_tracker.opo3tben_oneplus3tben
+    # - device_tracker.b6148079
     - device_tracker.opo3tln_oneplus3tln
     - sensor.bens_phone_battery
     - sensor.helenes_phone_battery
     - sensor.ben_location_to_home
     - sensor.helene_location_to_home
+    - script.send_eta_ben
+    - script.send_eta_ln
 
-weather:
-  name: Weather
+# family:
+  # name: Family
+  # entities:
+    # - device_tracker.opo3tben_oneplus3tben
+    # - device_tracker.opo3tln_oneplus3tln
+
+sub_weather:
   entities:
     - sensor.dark_sky_summary
     - sensor.dark_sky_temperature
     - sensor.dark_sky_humidity
-    - sensor.dark_sky_precip
     - sensor.dark_sky_precip_probability
+    - sensor.sunrise_time
+    - sensor.sunset_time
 
 home_condition:
   name: Ambiance
   entities:
-    - sensor.aeotec_zw074_multisensor_gen5_temperature_10_1
-    - sensor.aeotec_zw074_multisensor_gen5_relative_humidity_10_5
+    - sensor.aeotec_zw074_multisensor_gen5_temperature_2
+    - sensor.aeotec_zw074_multisensor_gen5_relative_humidity_2
 
 insidecam:
   name: Camera
   entities:
     - camera.home_camera
+
+zones:
+  name: Zones
+  entities:
+    - binary_sensor.floorplan
+
+# miplant:
+  # name: Garden
+  # entities:
+    # - sensor.citronnier_temperature
+    # - sensor.citronnier_moisture
+    # - sensor.citronnier_light_intensity
+    # - sensor.citronnier_conductivity
+    # - sensor.citronnier_battery

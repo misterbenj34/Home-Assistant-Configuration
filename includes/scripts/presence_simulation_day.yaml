@@ -1,0 +1,9 @@
+alias: "Presence simulation (day)"
+sequence:
+  - service: script.cover_bedroom_open
+  - delay: '00:00:30'
+  - service: script.cover_living_room_open
+  - service: notify.PushBullet_Ben
+    data:
+      title: 'Presence simulation (day)'
+      message: 'Cover opened'

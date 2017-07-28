@@ -1,0 +1,42 @@
+garden:
+  name: Jardin
+  view: yes
+  icon: mdi:flower
+  entities:
+    - group.weather
+    - group.mif_lemon
+    - group.mif_schefflera
+    - group.mif_avocatier
+
+mif_lemon:
+  name: Citronnier
+  icon: mdi:flower
+  entities:
+    - sensor.citronnier_temperature
+    - sensor.citronnier_moisture
+    - input_slider.miflora01_moisture_alert
+    - sensor.citronnier_light_intensity
+    - sensor.citronnier_conductivity
+    - sensor.citronnier_battery
+
+mif_schefflera:
+  name: Schefflera
+  icon: mdi:flower
+  entities:
+    - sensor.schefflera_temperature
+    - sensor.schefflera_moisture
+    - input_slider.miflora02_moisture_alert
+    - sensor.schefflera_light_intensity
+    - sensor.schefflera_conductivity
+    - sensor.schefflera_battery
+
+mif_avocatier:
+  name: Avocatier
+  icon: mdi:flower
+  entities:
+    - sensor.avocatier_temperature
+    - sensor.avocatier_moisture
+    - input_slider.miflora03_moisture_alert
+    - sensor.avocatier_light_intensity
+    - sensor.avocatier_conductivity
+    - sensor.avocatier_battery

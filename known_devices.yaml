@@ -1,12 +1,4 @@
 
-plsmzxhw_oneplus3tben:
-  hide_if_away: false
-  mac:
-  name: plsmzxhw
-  picture:
-  track: true
-  vendor:
-
 opo3tben_oneplus3tben:
   hide_if_away: false
   mac:
@@ -19,6 +11,22 @@ opo3tln_oneplus3tln:
   hide_if_away: false
   mac:
   name: opo3t-ln
+  picture:
+  track: true
+  vendor:
+
+plsmzxhw_oneplus3tben:
+  hide_if_away: true
+  mac:
+  name: plsmzxhw
+  picture:
+  track: false
+  vendor:
+
+b6148079:
+  hide_if_away: false
+  mac:
+  name: OPO3T-Ben-GPS
   picture:
   track: true
   vendor:

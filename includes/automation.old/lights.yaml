@@ -1,0 +1,62 @@
+  - alias: 'Corridor Light (at night)'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.aeotec_zw074_multisensor_gen5_sensor_12_0
+        from: 'off'
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: 'light.fibaro_system_fgd212_dimmer_2_level_14_0'
+          state: 'off'
+        - condition: time
+          after: '22:00:00'
+          before: '07:00:00'
+    action:
+      - service: light.turn_on
+        entity_id: light.fibaro_system_fgd212_dimmer_2_level_14_0
+        data:
+          brightness: 3
+      - delay: 1:00
+      - service: light.turn_off
+        entity_id: light.fibaro_system_fgd212_dimmer_2_level_14_0
+
+  - alias: 'Auto-light in living room'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.aeotec_zw074_multisensor_gen5_sensor_13_0
+        from: 'off'
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: numeric_state
+          entity_id: 'sensor.aeotec_zw074_multisensor_gen5_luminance_13_3'
+          below: 100
+        - condition: time
+          after: '12:00:00'
+          before: '23:00:00'
+    action:
+      - service: switch.turn_on
+        entity_id: switch.fibaro_system_fgs223_double_relay_switch_11_0
+
+  - alias: 'Lampadaire in living room (on)'
+    trigger:
+      - platform: state
+        entity_id: switch.fibaro_system_fgs223_double_relay_switch_11_0
+        from: 'off'
+        to: 'on'
+    action:
+      - service: switch.turn_on
+        entity_id: switch.neo_coolcam_power_plug_12a_switch_17_0
+
+  - alias: 'Lampadaire in living room (off)'
+    trigger:
+      - platform: state
+        entity_id: switch.fibaro_system_fgs223_double_relay_switch_11_0
+        from: 'on'
+        to: 'off'
+    action:
+      - service: switch.turn_off
+        entity_id: switch.neo_coolcam_power_plug_12a_switch_17_0

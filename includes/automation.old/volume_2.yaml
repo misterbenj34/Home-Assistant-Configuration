@@ -1,0 +1,9 @@
+- alias: living room - Volume Update
+  trigger:
+    platform: state
+    entity_id: media_player.denon_avrx1300w
+  action:
+    - service: input_slider.select_value
+      data_template:
+        entity_id: input_slider.volume_denon
+        value: '{{ states.media_player.denon_avrx1300w.attributes.volume_level }}'

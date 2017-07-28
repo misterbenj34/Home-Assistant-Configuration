@@ -1,0 +1,51 @@
+  - alias: 'Presence simulation (night)'
+    initial_state: false
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: '-02:00:00'
+    action:
+      - service: script.presence_simulation_night
+
+  - alias: 'Presence simulation (day)'
+    initial_state: false
+    trigger:
+      - platform: sun
+        event: sunrise
+        offset: '+02:00:00'
+    action:
+      - service: script.presence_simulation_day
+
+  - alias: 'Presence detection when simulation (corridor)'
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.aeotec_zw074_multisensor_gen5_sensor_12_0
+        from: 'off'
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: 'group.presence_sim'
+        state: 'on'
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'Presence detection alert !'
+          message: 'There is someone in the house (corridor) !'
+
+  - alias: 'Presence detection when simulation (living room)'
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.aeotec_zw074_multisensor_gen5_sensor_13_0
+        from: 'off'
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: 'group.presence_sim'
+        state: 'on'
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'Presence detection alert !'
+          message: 'There is someone in the house (living room) !'

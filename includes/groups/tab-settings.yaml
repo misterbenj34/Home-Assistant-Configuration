@@ -6,7 +6,9 @@ settings:
     - group.links
     - group.weather_auto
     - group.cover_auto
+    - group.light_auto
     - group.misc_auto
+    - group.presence_sim
 
 
 
@@ -22,17 +24,51 @@ links:
     - weblink.bah2830_yaml_example
 
 weather_auto:
-  name: Weather Automation
+  name: "Weather/Garden Automation"
   entities:
     - automation.raining
+    - automation.freeze
+    - automation.miflora01_battery_alert
+    - automation.miflora01_water_alert
+    - automation.miflora02_battery_alert
+    - automation.miflora02_water_alert
+    - automation.miflora03_battery_alert
+    - automation.miflora03_water_alert
 
 misc_auto:
   name: Misc Automation
   entities:
-    - automation.update_notifications
+    - automation.homeassistant_update
+    - automation.ben_leave_work
+    - automation.nas_hd_1_surveillance
+    - automation.nas_hd_2_surveillance
+    - automation.nas_volume_surveillance
+    - automation.living_room__adjust_volume
+    - automation.living_room__volume_update
 
 cover_auto:
   name: Cover Automation
   entities:
-    - automation.cover_close_after_sunset
-    - automation.cover_open_after_sunrise
+    - automation.cover_close_at_19h15_bedroom
+    - automation.cover_close_after_sunset_bedroom
+    - automation.cover_close_after_sunset_living_room
+    - automation.autoclose_all_on_summer_do
+    - automation.autoclose_all_on_summer_suggest
+
+light_auto:
+  name: Light Automation
+  entities:
+    - automation.corridor_light_at_day
+    - automation.corridor_light_at_night
+    - automation.autolight_in_living_room_on
+    - automation.autolight_in_living_room_off
+    - automation.lampadaire_in_living_room_on
+    - automation.lampadaire_in_living_room_off
+
+presence_sim:
+  name: Presence Simulation
+  entities:
+    - automation.presence_simulation_day
+    - automation.presence_simulation_night
+    - automation.presence_detection_when_simulation_corridor
+    - automation.presence_detection_when_simulation_living_room

@@ -1,0 +1,38 @@
+  - platform: miflora
+    mac: C4:7C:8D:63:1B:F0
+    name: Citronnier
+    force_update: false
+    median: 5
+    cache: 900
+    monitored_conditions:
+      - moisture
+      - light
+      - temperature
+      # - conductivity
+      - battery
+
+  - platform: miflora
+    mac: C4:7C:8D:62:77:8E
+    name: Schefflera
+    force_update: false
+    median: 5
+    cache: 3600
+    monitored_conditions:
+      - moisture
+      - light
+      - temperature
+      # - conductivity
+      - battery
+
+  - platform: miflora
+    mac: C4:7C:8D:62:65:E4
+    name: Avocatier
+    force_update: false
+    median: 5
+    cache: 450
+    monitored_conditions:
+      - moisture
+      - light
+      - temperature
+      # - conductivity
+      - battery

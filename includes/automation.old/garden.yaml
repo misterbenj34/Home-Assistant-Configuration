@@ -1,0 +1,122 @@
+  - alias: 'MiFlora01 battery alert'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.citronnier_battery
+        below: 20
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'MiFlora battery alert'
+          message: 'Lemon MiFlora battery is almost KO'
+      - service: persistent_notification.create
+        data:
+          title: 'MiFlora battery alert'
+          message: 'Please replace Lemon MiFlora battery'
+      - service: automation.turn_off
+        entity_id: automation.miflora01_battery_alert
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.miflora01_battery_alert
+
+  - alias: 'MiFlora01 water alert'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.citronnier_moisture
+        # below: {{ states.input_slider.miflora01_moisture_alert.state | int }}
+        below: 20
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'MiFlora water alert'
+          message: 'Lemon MiFlora is thirsty !'
+      - service: persistent_notification.create
+        data:
+          title: 'MiFlora water alert'
+          message: 'Please water the Lemon MiFlora'
+      - service: automation.turn_off
+        entity_id: automation.miflora01_water_alert
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.miflora01_water_alert
+
+  - alias: 'MiFlora02 battery alert'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.schefflera_battery
+        below: 20
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'MiFlora battery alert'
+          message: 'Schefflera MiFlora battery is almost KO'
+      - service: persistent_notification.create
+        data:
+          title: 'MiFlora battery alert'
+          message: 'Please replace Schefflera MiFlora battery'
+      - service: automation.turn_off
+        entity_id: automation.miflora02_battery_alert
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.miflora02_battery_alert
+
+  - alias: 'MiFlora02 water alert'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.schefflera_moisture
+        # below: {{ states.input_slider.miflora02_moisture_alert.state | int }}
+        below: 20
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'MiFlora water alert'
+          message: 'Schefflera MiFlora is thirsty !'
+      - service: persistent_notification.create
+        data:
+          title: 'MiFlora water alert'
+          message: 'Please water the Schefflera MiFlora'
+      - service: automation.turn_off
+        entity_id: automation.miflora02_water_alert
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.miflora02_water_alert
+
+  - alias: 'MiFlora03 battery alert'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.avocatier_battery
+        below: 20
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'MiFlora battery alert'
+          message: 'Avocatier MiFlora battery is almost KO'
+      - service: persistent_notification.create
+        data:
+          title: 'MiFlora battery alert'
+          message: 'Please replace Avocatier MiFlora battery'
+      - service: automation.turn_off
+        entity_id: automation.miflora03_battery_alert
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.miflora03_battery_alert
+
+  - alias: 'MiFlora03 water alert'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.avocatier_moisture
+        # below: {{ states.input_slider.miflora03_moisture_alert.state | int }}
+        below: 20
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'MiFlora water alert'
+          message: 'Avocatier MiFlora is thirsty !'
+      - service: persistent_notification.create
+        data:
+          title: 'MiFlora water alert'
+          message: 'Please water the Avocatier MiFlora'
+      - service: automation.turn_off
+        entity_id: automation.miflora03_water_alert
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.miflora03_water_alert

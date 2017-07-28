@@ -1,0 +1,5 @@
+alias: "Cover open (living room)"
+sequence:
+  - service: cover.open_cover
+    data:
+      entity_id: cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_2

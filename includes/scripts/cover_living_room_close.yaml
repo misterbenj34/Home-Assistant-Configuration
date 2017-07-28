@@ -1,0 +1,22 @@
+alias: "Cover close after sunset (living room)"
+sequence:
+  - condition: template
+    value_template: '{{ states.cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_2.attributes.current_position > 5 }}'
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_2
+      position: 60
+  # Security (in case of drinking on balcony of child presence)
+  - delay: '00:00:20'
+  - service: cover.set_cover_position
+    data:
+      entity_id: cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_2
+      position: 0
+  # - service: notify.nma
+    # data:
+      # title: 'Home Assistant'
+      # message: 'Cover closed into the living room'
+  # - service: notify.PushBullet
+    # data:
+      # title: 'Home Assistant'
+      # message: 'Cover closed into the living room'

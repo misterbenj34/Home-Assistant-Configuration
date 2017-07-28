@@ -1,0 +1,643 @@
+#  COVER AUTOMATION
+
+  - id: cover_bedroom_close_sunset
+    alias: 'Cover close after sunset (bedroom)'
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: '+00:45:00'
+    action:
+      - service: script.cover_bedroom_close
+
+  - id: cover_bedroom_close_19h15
+    initial_state: True
+    alias: 'Cover close at 19h15 (bedroom)'
+    trigger:
+      - platform: time
+        at: '19:15:00'
+    action:
+      - service: script.cover_bedroom_close
+
+  - id: cover_living_room_close_sunset
+    initial_state: True
+    alias: 'Cover close after sunset (living room)'
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: '+00:45:00'
+    condition:
+      - condition: template
+        value_template: '{{ states.cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_2.attributes.current_position > 50 }}'
+    action:
+      - service: script.cover_living_room_close
+
+  - id: auto_close_all_summer_do
+    # initial_state: True
+    alias: 'Auto-close all on summer (DO)'
+    trigger:
+      - platform: time
+        minutes: '/5'
+        seconds: 00
+    condition:
+      condition: and
+      conditions:
+        - condition: numeric_state
+          entity_id: 'sensor.citronnier_temperature'
+          above: 22
+        - condition: numeric_state
+          entity_id: 'sensor.dark_sky_temperature'
+          above: 22
+        - condition: numeric_state
+          entity_id: 'sensor.aeotec_zw074_multisensor_gen5_temperature_2'
+          above: 20
+        - condition: state
+          entity_id: 'binary_sensor.someoneathome'
+          state: 'off'
+        - condition: time
+          after: '09:00:00'
+          before: '19:00:00'
+        - condition: template
+          value_template: '{{ states.cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_2.attributes.current_position > 40 }}'
+    action:
+      - service: script.cover_living_room_close
+      - service: script.cover_bedroom_close
+
+  - id: auto_close_all_summer_suggest
+    initial_state: True
+    alias: 'Auto-close all on summer (SUGGEST)'
+    trigger:
+      - platform: time
+        minutes: '/30'
+        seconds: 00
+    condition:
+      condition: and
+      conditions:
+        - condition: numeric_state
+          entity_id: 'sensor.citronnier_temperature'
+          above: 23
+        - condition: numeric_state
+          entity_id: 'sensor.dark_sky_temperature'
+          above: 23
+        - condition: numeric_state
+          entity_id: 'sensor.aeotec_zw074_multisensor_gen5_temperature_2'
+          above: 22
+        - condition: state
+          entity_id: 'binary_sensor.someoneathome'
+          state: 'on'
+        - condition: time
+          after: '09:00:00'
+          before: '19:00:00'
+        - condition: template
+          value_template: '{{ states.cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_2.attributes.current_position > 90 }}'
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'It is getting hot outside !'
+          message: 'You should close covers in the living room and the bedroom'
+      - service: notify.PushBullet_LN
+        data:
+          title: 'It is getting hot outside !'
+          message: 'You should close covers in the living room and the bedroom'
+
+
+#  GARDEN AUTOMATION #
+
+  - id: miflora01_battery_alert
+    initial_state: True
+    alias: 'MiFlora01 battery alert'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.citronnier_battery
+        below: 20
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'MiFlora battery alert'
+          message: 'Lemon MiFlora battery is almost KO'
+      - service: persistent_notification.create
+        data:
+          title: 'MiFlora battery alert'
+          message: 'Please replace Lemon MiFlora battery'
+      - service: automation.turn_off
+        entity_id: automation.miflora01_battery_alert
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.miflora01_battery_alert
+
+  - id: miflora01_water_alert
+    initial_state: True
+    alias: 'MiFlora01 water alert'
+    trigger:
+      - platform: template
+        value_template: '{{states.sensor.citronnier_moisture.state | int < states.input_slider.miflora01_moisture_alert.state | int}}'
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'MiFlora water alert'
+          message: 'Lemon MiFlora is thirsty !'
+      - service: persistent_notification.create
+        data:
+          title: 'MiFlora water alert'
+          message: 'Please water the Lemon MiFlora'
+      - service: automation.turn_off
+        entity_id: automation.miflora01_water_alert
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.miflora01_water_alert
+
+  - id: miflora02_battery_alert
+    initial_state: True
+    alias: 'MiFlora02 battery alert'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.schefflera_battery
+        below: 20
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'MiFlora battery alert'
+          message: 'Schefflera MiFlora battery is almost KO'
+      - service: persistent_notification.create
+        data:
+          title: 'MiFlora battery alert'
+          message: 'Please replace Schefflera MiFlora battery'
+      - service: automation.turn_off
+        entity_id: automation.miflora02_battery_alert
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.miflora02_battery_alert
+
+  - id: miflora02_water_alert
+    initial_state: True
+    alias: 'MiFlora02 water alert'
+    trigger:
+      - platform: template
+        value_template: '{{states.sensor.schefflera_moisture.state | int < states.input_slider.miflora02_moisture_alert.state | int}}'
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'MiFlora water alert'
+          message: 'Schefflera MiFlora is thirsty !'
+      - service: persistent_notification.create
+        data:
+          title: 'MiFlora water alert'
+          message: 'Please water the Schefflera MiFlora'
+      - service: automation.turn_off
+        entity_id: automation.miflora02_water_alert
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.miflora02_water_alert
+
+  - id: miflora03_battery_alert
+    initial_state: True
+    alias: 'MiFlora03 battery alert'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.avocatier_battery
+        below: 20
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'MiFlora battery alert'
+          message: 'Avocatier MiFlora battery is almost KO'
+      - service: persistent_notification.create
+        data:
+          title: 'MiFlora battery alert'
+          message: 'Please replace Avocatier MiFlora battery'
+      - service: automation.turn_off
+        entity_id: automation.miflora03_battery_alert
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.miflora03_battery_alert
+
+  - id: miflora03_water_alert
+    initial_state: False
+    alias: 'MiFlora03 water alert'
+    trigger:
+      - platform: template
+        value_template: '{{states.sensor.avocatier_moisture.state | int < states.input_slider.miflora03_moisture_alert.state | int}}'
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'MiFlora water alert'
+          message: 'Avocatier MiFlora is thirsty !'
+      - service: persistent_notification.create
+        data:
+          title: 'MiFlora water alert'
+          message: 'Please water the Avocatier MiFlora'
+      - service: automation.turn_off
+        entity_id: automation.miflora03_water_alert
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.miflora03_water_alert
+
+#  LEAVE WORK AUTOMATION #
+
+  - id: ben_leave_work
+    initial_state: True
+    alias: "Ben Leave work"
+    trigger:
+      - platform: zone
+        entity_id: device_tracker.opo3tben_oneplus3tben
+        zone: zone.la_defense
+        event: leave
+    condition:
+      - condition: time
+        after: '16:30:00'
+        before: '19:00:00'
+        weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+    action:
+      - service: notify.PushBullet_Ben
+        data_template:
+          message: >
+            Benjamin is leaving work.
+            ETA: {{ states.sensor.ben_location_to_home.attributes.duration }}
+          title: 'Benjamin Leave Work'
+      - service: notify.PushBullet_LN
+        data_template:
+          message: >
+            Benjamin is leaving work.
+            ETA: {{ states.sensor.ben_location_to_home.attributes.duration }}
+          title: 'Benjamin Leave Work'
+
+#  LIGHTS AUTOMATION 
+
+  - id: light_corridor_day
+    initial_state: False
+    alias: 'Corridor Light (at day)'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.aeotec_zw074_multisensor_gen5_sensor
+        from: 'off'
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: 'light.fibaro_system_fgd212_dimmer_2_level'
+          state: 'off'
+        - condition: time
+          after: '07:00:00'
+          before: '22:00:00'
+    action:
+      - service: light.turn_on
+        entity_id: light.fibaro_system_fgd212_dimmer_2_level
+        data:
+          brightness: 100
+      - delay: '00:00:30'
+      - service: light.turn_off
+        entity_id: light.fibaro_system_fgd212_dimmer_2_level
+
+
+  - id: light_corridor_night
+    initial_state: True
+    alias: 'Corridor Light (at night)'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.aeotec_zw074_multisensor_gen5_sensor
+        from: 'off'
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: 'light.fibaro_system_fgd212_dimmer_2_level'
+          state: 'off'
+        - condition: time
+          after: '22:00:00'
+          before: '07:00:00'
+    action:
+      - service: light.turn_on
+        entity_id: light.fibaro_system_fgd212_dimmer_2_level
+        data:
+          brightness: 3
+      - delay: '00:00:30'
+      - service: light.turn_off
+        entity_id: light.fibaro_system_fgd212_dimmer_2_level
+
+
+  - id: light_auto_living_room_on
+    initial_state: True
+    alias: 'Auto-light in living room (On)'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.aeotec_zw074_multisensor_gen5_sensor_2
+        from: 'off'
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: numeric_state
+          entity_id: 'sensor.aeotec_zw074_multisensor_gen5_luminance_2'
+          below: 30
+        - condition: time
+          after: '12:00:00'
+          before: '23:00:00'
+    action:
+      - service: switch.turn_on
+        entity_id: switch.fibaro_system_fgs223_double_relay_switch
+
+  - id: light_auto_living_room_off
+    initial_state: True
+    alias: 'Auto-light in living room (Off)'
+    trigger:
+      # - platform: time
+        # minutes: '/10'
+        # seconds: 00
+      - platform: numeric_state
+        entity_id: 'sensor.aeotec_zw074_multisensor_gen5_luminance_2'
+        above: 1000
+    condition:
+      # condition: and
+      # conditions:
+        # - condition: numeric_state
+          # entity_id: 'sensor.aeotec_zw074_multisensor_gen5_luminance_2'
+          # above: 500
+        - condition: time
+          after: '06:00:00'
+          before: '21:00:00'
+    action:
+      - service: switch.turn_off
+        entity_id: switch.fibaro_system_fgs223_double_relay_switch
+
+  - id: light_auto_lampadaire_on
+    initial_state: True
+    alias: 'Lampadaire in living room (on)'
+    trigger:
+      - platform: state
+        entity_id: switch.fibaro_system_fgs223_double_relay_switch
+        from: 'off'
+        to: 'on'
+    action:
+      - service: switch.turn_on
+        entity_id: switch.neo_coolcam_power_plug_12a_switch_3
+
+  - id: light_auto_lampadaire_off
+    initial_state: True
+    alias: 'Lampadaire in living room (off)'
+    trigger:
+      - platform: state
+        entity_id: switch.fibaro_system_fgs223_double_relay_switch
+        from: 'on'
+        to: 'off'
+    action:
+      - service: switch.turn_off
+        entity_id: switch.neo_coolcam_power_plug_12a_switch_3
+
+#   NAS AUTOMATION 
+
+  - id: NAS_volume_surveillance
+    initial_state: True
+    alias: 'NAS volume surveillance'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.volume_used_volume_1
+        above: '90'
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'NAS volume surveillance'
+          message: '90% of the NAS volume is full'
+      - service: persistent_notification.create
+        data:
+          title: 'NAS volume surveillance'
+          message: '90% of the NAS volume is full'
+      - service: automation.turn_off
+        entity_id: automation.nas_volume_surveillance
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.nas_volume_surveillance
+
+  - id: NAS_HD1_surveillance
+    initial_state: True
+    alias: 'NAS HD #1 surveillance'
+    trigger:
+      - platform: template
+        value_template: "{% if not is_state('sensor.status_smart_sda', 'safe') %}true{% endif %}"
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'NAS HD #1 surveillance'
+          message: 'Synology report a defective hard drive #1 (SMART status)'
+      - service: persistent_notification.create
+        data:
+          title: 'NAS HD #1 surveillance'
+          message: 'Synology report a defective hard drive #1 (SMART status)'
+      - service: automation.turn_off
+        entity_id: automation.nas_hd_1_surveillance
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.nas_hd_1_surveillance
+
+  - id: NAS_HD2_surveillance
+    initial_state: True
+    alias: 'NAS HD #2 surveillance'
+    trigger:
+      - platform: template
+        value_template: "{% if not is_state('sensor.status_smart_sdb', 'safe') %}true{% endif %}"
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'NAS HD #2 surveillance'
+          message: 'Synology report a defective hard drive #2 (SMART status)'
+      - service: persistent_notification.create
+        data:
+          title: 'NAS HD #2 surveillance'
+          message: 'Synology report a defective hard drive #2 (SMART status)'
+      - service: automation.turn_off
+        entity_id: automation.nas_hd_2_surveillance
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.nas_hd_2_surveillance
+
+# PRESENCE SIMULATION AUTOMATION 
+
+  - id: Presence_simulation_night
+    alias: 'Presence simulation (night)'
+    initial_state: false
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: '-02:00:00'
+    action:
+      - service: script.presence_simulation_night
+
+  - id: Presence_simulation_day
+    alias: 'Presence simulation (day)'
+    initial_state: false
+    trigger:
+      - platform: sun
+        event: sunrise
+        offset: '+02:00:00'
+    action:
+      - service: script.presence_simulation_day
+
+  - id: Presence_simulation_detection_corridor
+    alias: 'Presence detection when simulation (corridor)'
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.aeotec_zw074_multisensor_gen5_sensor
+        from: 'off'
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: 'group.presence_sim'
+        state: 'on'
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'Presence detection alert !'
+          message: 'There is someone in the house (corridor) !'
+
+  - id: Presence_simulation_detection_living_room
+    alias: 'Presence detection when simulation (living room)'
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.aeotec_zw074_multisensor_gen5_sensor_2
+        from: 'off'
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: 'group.presence_sim'
+        state: 'on'
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'Presence detection alert !'
+          message: 'There is someone in the house (living room) !'
+
+#  UPDATE AUTOMATION 
+
+  - id: HA_update
+    initial_state: True
+    alias: 'HomeAssistant update'
+    trigger:
+      - platform: state
+        entity_id: updater.updater
+    action:
+      - service: notify.NMA
+        data:
+          title: 'New Home Assistant Release'
+          message: 'There is a new Home Assistant release available'
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'New Home Assistant Release'
+          message: 'There is a new Home Assistant release available'
+      - service: persistent_notification.create
+        data:
+          title: 'New Home Assistant Release'
+          message: 'There is a new Home Assistant release available'
+
+#  VOLUME AUTOMATION #
+
+  - id: volume_adjust
+    initial_state: True
+    alias: living_room - Adjust Volume
+    trigger:
+      platform: state
+      entity_id: input_slider.volume_denon
+    action:
+      - service: media_player.volume_set
+        data_template:
+          entity_id: media_player.denon_avrx1300w
+          volume_level: '{{ trigger.to_state.state }}'
+
+  - id: volume_update
+    initial_state: True
+    alias: living room - Volume Update
+    trigger:
+      platform: state
+      entity_id: media_player.denon_avrx1300w
+    action:
+      - service: input_slider.select_value
+        data_template:
+          entity_id: input_slider.volume_denon
+          value: '{{ states.media_player.denon_avrx1300w.attributes.volume_level }}'
+
+#  WEATHER AUTOMATION 
+
+  - id: weather_rain
+    initial_state: True
+    alias: 'Raining'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.dark_sky_precip_probability
+        above: 20
+    # condition:
+      # - condition: time
+        # after: '07:00'
+        # before: '09:30'
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'Alerte Meteo'
+          message: 'Il va pleuvoir !'
+      - service: automation.turn_off
+        entity_id: automation.raining
+      - delay: '00:30:00'
+      - service: automation.turn_on
+        entity_id: automation.raining
+
+  - id: weather_freeze
+    initial_state: True
+    alias: 'Freeze'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.dark_sky_temperature
+        below: 2
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'Alerte Temperature Negative'
+          message: 'Il va faire froid, couvre les plantes !'
+      - service: automation.turn_off
+        entity_id: automation.freeze
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.freeze
+
+
+#  ZWAVE AUTOMATION 
+
+  - id: zwave_soft_reset
+    initial_state: True
+    alias: 'Soft Reset at 2:30am'
+    trigger:
+      platform: time
+      at: '2:30:00'
+    action:
+      service: zwave.soft_reset
+
+  - id: zwave_heal
+    initial_state: True
+    alias: 'Heal at 2:45am'
+    trigger:
+      platform: time
+      at: '2:45:00'
+    action:
+      service: zwave.heal_network
+
+
+#  MOTION AUTOMATION
+
+  - id: motion_at_home
+    initial_state: True
+    alias: 'Motion at home'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.aeotec_zw074_multisensor_gen5_sensor
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.aeotec_zw074_multisensor_gen5_sensor_2
+        from: 'off'
+        to: 'on'
+    action:
+      - delay: '00:00:01'

@@ -1,0 +1,33 @@
+alias: Start Playing
+sequence:
+  - service: media_player.turn_on
+    data:
+      entity_id: media_player.denon_avrx1300w
+  - service: media_player.select_source
+    data:
+      entity_id: media_player.denon_avrx1300w
+      source: 'DVD/Blu-ray'
+  - service: media_player.volume_set
+    data:
+      entity_id: media_player.denon_avrx1300w
+      volume_level: '0.34'
+  - service: media_player.volume_set
+    data:
+      entity_id: media_player.home
+      volume_level: '1'
+  -  service: media_player.play_media
+     data_template:
+       entity_id: media_player.home
+       media_content_id: >
+        {% if is_state("input_select.radio_station", "Radio 538") %} http://vip-icecast.538.lw.triple-it.nl:80/RADIO538_MP3
+        {% elif is_state("input_select.radio_station", "France Info") %} http://direct.franceinfo.fr/live/franceinfo-midfi.mp3
+        {% elif is_state("input_select.radio_station", "France Inter") %} http://direct.franceinter.fr/live/franceinter-midfi.mp3
+        {% elif is_state("input_select.radio_station", "Mouv") %} http://direct.mouv.fr/live/mouv-midfi.mp3
+        {% elif is_state("input_select.radio_station", "Virgin Radio") %} http://vr-live-mp3-128.scdn.arkena.com/virginradio.mp3
+        {% elif is_state("input_select.radio_station", "Chérie FM") %} http://cdn.nrjaudio.fm/audio1/fr/40104/mp3_128.mp3
+        {% elif is_state("input_select.radio_station", "Rires & Chansons") %} http://cdn.nrjaudio.fm/audio1/fr/40105/mp3_128.mp3
+        {% elif is_state("input_select.radio_station", "RTL2") %} http://streaming.radio.rtl2.fr/rtl2-idf-44-128
+        {% elif is_state("input_select.radio_station", "Alpes 1") %} http://broadcast.infomaniak.net/alpes1grenoble-high.mp3
+        {% elif is_state("input_select.radio_station", "RTS") %} http://stream.rtsfm.com/rts-montpellier
+        {% endif %}
+       media_content_type: 'audio/mp4'

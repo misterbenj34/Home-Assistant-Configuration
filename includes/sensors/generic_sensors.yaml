@@ -1,14 +1,26 @@
   - platform: darksky
-    api_key: 1ccc03bd3ff80b8d703a8ce58956ec57
+    api_key: !secret darksky_api
     monitored_conditions:
       - summary
       - icon
-      - precip_type
-      - precip_intensity
+      # - precip_type
+      # - precip_intensity
       - precip_probability
       - temperature
       - apparent_temperature
       - humidity
+      - hourly_summary
+    update_interval:
+      minutes: 5
+
+  - platform: template
+    sensors:
+      sunset_time:
+        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_setting)  | timestamp_custom("%H:%M") }}'
+  - platform: template
+    sensors:
+      sunrise_time:
+        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_rising)  | timestamp_custom("%H:%M") }}'
 
   - platform: time_date
     display_options:
@@ -17,7 +29,7 @@
 
   - platform: sabnzbd
     host: 192.168.1.12
-    api_key: 590923824019c4ddded0d5bb3bc9c7d9
+    api_key: !secret sabnzbd_api
     monitored_variables:
       - 'current_status'
       - 'speed'
@@ -28,8 +40,8 @@
 
   - platform: synologydsm
     host: 192.168.1.12
-    username: admin
-    password: B9EA66BaS
+    username: !secret synology_login
+    password: !secret synology_pass
     monitored_conditions:
       - cpu_total_load
       - memory_real_usage
@@ -37,3 +49,5 @@
       - disk_smart_status
       - disk_temp
       - volume_percentage_used
+      - volume_size_used
+      - volume_size_total

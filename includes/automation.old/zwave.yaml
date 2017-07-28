@@ -1,0 +1,13 @@
+  - alias: 'Soft Reset at 2:30am'
+    trigger:
+      platform: time
+      after: '2:30:00'
+    action:
+      service: zwave.soft_reset
+
+  - alias: 'Heal at 2:45am'
+    trigger:
+      platform: time
+      after: '2:45:00'
+    action:
+      service: zwave.heal_network

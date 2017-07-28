@@ -1,0 +1,8 @@
+  - alias: 'Re-arm Motion sensor'
+    trigger:
+      - platform: state
+        entity_id: sensor.aeotec_zw074_multisensor_gen5_burglar_10_10
+        from: '0'
+        to: '7'
+    action:
+      - service: script.motion_rearm

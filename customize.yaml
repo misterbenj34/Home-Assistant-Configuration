@@ -1,26 +1,68 @@
+binary_sensor.floorplan:
+  custom_ui_state_card: floorplan
+  config: !include floorplan.yaml
+
+group.sub_weather:
+  custom_ui_state_card: custom-ui  
+  state_card_mode: badges
+
 # Covers
-cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_4_0:
+cover.fibaro_system_fgrm222_roller_shutter_controller_2_level:
   friendly_name: Volet Chambre
-# cover.fibaro_system_fgrm222_roller_shutter_controller_2_switch_4_0:
-  # hidden: true
-cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_9_0:
+  custom_ui_state_card: custom-ui
+  state_card_mode: single-line
+  extra_data_template: "{current_position}%"
+cover.fibaro_system_fgrm222_roller_shutter_controller_2_level_2:
   friendly_name: Volet Salon
-# cover.fibaro_system_fgrm222_roller_shutter_controller_2_switch_9_0:
-  # hidden: true
+  custom_ui_state_card: custom-ui
+  state_card_mode: single-line
+  extra_data_template: "{current_position}%"
+switch.fibaro_system_fgs223_double_relay_switch:
+  friendly_name: Lumières Salon
+  icon: mdi:lightbulb
+switch.neo_coolcam_power_plug_12a_switch:
+  friendly_name: Guirlande Cerise
+  icon: mdi:lightbulb
+switch.neo_coolcam_power_plug_12a_switch_2:
+  friendly_name: Guirlande Thibault
+  icon: mdi:lightbulb
+switch.neo_coolcam_power_plug_12a_switch_3:
+  friendly_name: Lampadaire Salon
+  icon: mdi:lightbulb
+switch.neo_coolcam_power_plug_12a_switch_4:
+  friendly_name: Denon AVR-X1300W
+  icon: mdi:amplifier
+light.fibaro_system_fgd212_dimmer_2_level:
+  friendly_name: Lumière Couloir
+  icon: mdi:ceiling-light
+  custom_ui_state_card: custom-ui
+  state_card_mode: single-line
+  extra_data_template: "{brightness}%"
+  slider_theme:
+    max: 255
+light.living_room:
+  friendly_name: Abat Jour Salon
+  icon: mdi:lightbulb
 
 # Groups
-group.ben:
-  icon: mdi:arrow-down-bold
-group.helene:
-  icon: mdi:arrow-down-bold
+# group.ben:
+  # icon: mdi:arrow-down-bold
+# group.helene:
+  # icon: mdi:arrow-down-bold
 
 # Sensors
-sensor.aeotec_zw074_multisensor_gen5_temperature_10_1:
+sensor.aeotec_zw074_multisensor_gen5_temperature_2:
   friendly_name: Temperature Salon
   icon: mdi:thermometer
-sensor.aeotec_zw074_multisensor_gen5_relative_humidity_10_5:
+sensor.aeotec_zw074_multisensor_gen5_relative_humidity_2:
   friendly_name: Humidite Salon
   icon: mdi:weather-rainy
+binary_sensor.aeotec_zw074_multisensor_gen5_sensor:
+  friendly_name: Présence Couloir
+  device_class : motion
+binary_sensor.aeotec_zw074_multisensor_gen5_sensor_2:
+  friendly_name: Présence Salon
+  device_class : motion
 sensor.sabnzbd_status:
   icon: mdi:download
 sensor.sabnzbd_disk:
@@ -35,7 +77,7 @@ sensor.sabnzbd_speed:
   icon: mdi:speedometer
 
 sensor.dark_sky_temperature:
-  friendly_name: "Temperature"
+  friendly_name: "Outside temperature"
 sensor.dark_sky_summary:
   friendly_name: "Summary"
 sensor.dark_sky_humidity:
@@ -49,17 +91,36 @@ sensor.bens_phone_battery:
 sensor.helenes_phone_battery:
   icon: mdi:battery-charging-100
 sensor.ben_location_to_home:
-  friendly_name: "Ben to Home ETA"
+  friendly_name: "ETA Benjamin to Home"
   icon: mdi:run-fast
 sensor.helene_location_to_home:
-  friendly_name: "Helene to Home ETA"
+  friendly_name: "ETA Hélène to Home"
+  icon: mdi:run-fast
+script.send_eta_ben:
+  icon: mdi:car
+script.send_eta_ln:
+  icon: mdi:car
+sensor.sunrise_time:
+  friendly_name: "Next Sunrise"
+  icon: mdi:weather-sunset-up
+sensor.sunset_time:
+  friendly_name: "Next Sunset"
+  icon: mdi:weather-sunset-down
+script.leave_home:
   icon: mdi:run-fast
 
 
 device_tracker.opo3tben_oneplus3tben:
   friendly_name: "Ben"
+  icon: mdi:account
 device_tracker.opo3tln_oneplus3tln:
   friendly_name: "Helene"
+  icon: mdi:account
+
+script.radio:
+  icon: mdi:play
+script.radio_off:
+  icon: mdi:stop
 
 
 ################
@@ -67,11 +128,13 @@ device_tracker.opo3tln_oneplus3tln:
 ################
 group.home:
   order: 1
-group.salon:
+group.mediap:
   order: 2
-group.chambre:
+group.lights:
   order: 3
-group.misc:
+group.garden:
   order: 4
-group.settings:
+group.misc:
   order: 5
+group.settings:
+  order: 6

@@ -1,0 +1,35 @@
+  - alias: 'Raining'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.dark_sky_precip_probability
+        above: 10
+    # condition:
+      # - condition: time
+        # after: '07:00'
+        # before: '09:30'
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'Alerte Meteo'
+          message: 'Il va pleuvoir !'
+      - service: automation.turn_off
+        entity_id: automation.raining
+      - delay: '00:30:00'
+      - service: automation.turn_on
+        entity_id: automation.raining
+
+  - alias: 'Freeze'
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.dark_sky_temperature
+        below: 2
+    action:
+      - service: notify.PushBullet_Ben
+        data:
+          title: 'Alerte Temperature Négative'
+          message: 'Il va faire froid, couvre les plantes !'
+      - service: automation.turn_off
+        entity_id: automation.freeze
+      - delay: '24:00:00'
+      - service: automation.turn_on
+        entity_id: automation.freeze

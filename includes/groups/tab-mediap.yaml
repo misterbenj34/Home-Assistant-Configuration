@@ -1,0 +1,29 @@
+mediap:
+  name: Salon
+  view: yes
+  icon: mdi:theater
+  entities:
+    - group.radio
+    - group.remote
+    - group.media_player
+
+remote:
+  name: Telecommande
+  entities:
+    - remote.salon
+
+media_player:
+  name: Media Player
+  entities:
+    - media_player.home
+    - media_player.denon_avrx1300w
+    - media_player.spotify
+    # - media_player.test_universal
+
+radio:
+  name: Radio Internet
+  entities:
+  - input_select.radio_station
+  - input_slider.volume_denon
+  - script.radio
+  - script.radio_off

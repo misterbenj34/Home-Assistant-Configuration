@@ -1,0 +1,12 @@
+sensor.aeotec_zw074_multisensor_gen5_alarm_level_12_1:
+  ignored: true
+  polling_intensity: 0
+sensor.aeotec_zw074_multisensor_gen5_alarm_level_13_1:
+  ignored: true
+  polling_intensity: 0
+sensor.aeotec_zw074_multisensor_gen5_alarm_type_12_0:
+  ignored: true
+  polling_intensity: 0
+sensor.aeotec_zw074_multisensor_gen5_alarm_type_13_0:
+  ignored: true
+  polling_intensity: 0

@@ -5,8 +5,9 @@ homeassistant:
   elevation: 20
   unit_system: metric
   time_zone: Europe/Paris
- 
   customize: !include customize.yaml
+
+config:
 
 # This will override the default home zone
 zone:
@@ -17,10 +18,10 @@ zone:
   icon: mdi:home
 
 zone 2:
-  name: Ben Work
+  name: La Defense
   latitude: 48.892359
   longitude: 2.246744
-  radius: 300
+  radius: 75
   icon: mdi:briefcase
 
 zone 3:
@@ -34,7 +35,7 @@ zone 4:
   name: Creche
   latitude: 48.820298
   longitude: 2.202117
-  radius: 150
+  radius: 300
   icon: mdi:robot
 
 
@@ -43,14 +44,27 @@ zone 4:
 ############
 group: !include_dir_merge_named includes/groups
 sensor: !include_dir_merge_list includes/sensors
-automation: !include_dir_merge_list includes/automation
+# automation: !include_dir_merge_list includes/automation
+automation: !include automations.yaml
+script: !include_dir_named includes/scripts
+# panel_custom: !include panel_custom.yaml
+binary_sensor: !include binary_sensors.yaml
 
 # Enables the frontend
 frontend:
 
+light:
+  - platform: yeelight
+    devices:
+      192.168.1.121:
+        name: Living Room
+        transition: 350
+        # use_music_mode: True
+
 zwave:
   usb_path: /dev/ttyUSB0
   polling_interval: 60000
+  device_config: !include zwave_device_config.yaml
   # debug: true
 
 mqtt:
@@ -58,47 +72,112 @@ mqtt:
   port: 12788
   client_id: home-assistant-1
   keepalive: 60
-  # username: ha
-  username: plsmzxhw
+  username: ha
+  # username: plsmzxhw
   password: !secret mqtt_password
 
 device_tracker:
   - platform: owntracks
+
+  # - platform: asuswrt
+    # host: 192.168.1.1
+    # username: !secret asus_login
+    # password: !secret asus_password
+    # protocol: telnet
+    # interval_seconds: 60
+    # consider_home: 180
+    # track_new_devices: yes
 
 camera:
   - platform: generic
     still_image_url: !secret camera_url
     name: Home Camera
 
-
 http:
   api_password: !secret http_password
+  base_url: http://88.182.124.121:8123
 
 # Text to speech
-# tts:
-  # platform: google
-  # language: 'fr'
+tts:
+  platform: google
+  language: 'fr'
+
+conversation:
+
+apiai:
+  intents:
+    GetTemperature:
+      speech: We have {{ states('sensor.citronnier_temperature') }} degrees
+      async_action: False
+      action:
+        service: notify.notify
+        data_template:
+          message: Api.ai has send a request
 
 # Notifications
 notify:
-  - name: NMA
-    platform: nma
-    api_key: !secret api_key_nma
-  - name: PushBullet
+  - name: PushBullet_Ben
     platform: pushbullet
-    api_key: !secret api_key_pushbullet
+    api_key: !secret api_key_pushbullet_ben
+  - name: PushBullet_LN
+    platform: pushbullet
+    api_key: !secret api_key_pushbullet_ln
 
 media_player:
   - platform: denonavr
     host: 192.168.1.101
-  # - platform: kodi
-    # host: 192.168.1.15
   - platform: cast
+  - platform: spotify
+    client_id: !secret spotify_id
+    client_secret: !secret spotify_pass
+  - platform: universal
+    name: Test Universal
+    children:
+      - media_player.denon_avrx1300w
+      - media_player.home
+      - media_player.spotify
+    commands:
+      turn_on:
+        service: switch.turn_on
+        data:
+          entity_id: switch.living_room_tv
+      turn_off:
+        service: switch.turn_off
+        data:
+          entity_id: switch.living_room_tv
+      volume_up:
+        service: switch.turn_on
+        data:
+          entity_id: switch.living_room_volume_up
+      volume_down:
+        service: switch.turn_on
+        data:
+          entity_id: switch.living_room_volume_down
+      volume_mute:
+        service: switch.turn_on
+        data:
+          entity_id: switch.living_room_mute
+      select_source:
+        service: media_player.select_source
+        data_template:
+          entity_id: media_player.receiver
+          source: ''
+      volume_set:
+        service: media_player.volume_set
+        data_template:
+          entity_id: media_player.receiver
+          volume_level: ''
+    attributes:
+      state: switch.living_room_tv
+      is_volume_muted: switch.living_room_mute
+      volume_level: media_player.receiver|volume_level
+      source: media_player.receiver|source
+      source_list: media_player.receiver|source_list
 
-remote:
-  - platform: harmony
-    name: Salon
-    host: 192.168.1.50
+# remote:
+  # - platform: harmony
+    # name: Salon
+    # host: 192.168.1.50
 
 weblink:
   entities:
@@ -121,36 +200,216 @@ weblink:
     - name: BAH2830 YAML example
       url: https://github.com/bah2830/Home-Assistant-Configs
 
+panel_iframe:
+  # configurator:
+    # title: Configurator
+    # icon: mdi:wrench
+    # url: http://192.168.1.52:3218
+  hass:
+    title: HASS Components
+    icon: mdi:assistant
+    url: https://home-assistant.io/components/#all
+  # mdiindex:
+    # title: MDI Icon Index
+    # icon: mdi:vector-square
+    # url: http://192.168.1.52:8123/local/home-assistant-mdi/home-assistant-mdi.html
 
-# ASUS RT68U
-# device_tracker:
-  # - platform: asuswrt
-    # host: 192.168.1.1
-    # username: !secret asus_login
-    # password: !secret asus_password
-    # interval_seconds: 10
-    # consider_home: 180
-    # track_new_devices: yes
+input_select:
+  radio_station:
+    name: 'Select Radio Station:'
+    options:
+      - Alpes 1
+      - Chérie FM
+      - France Info
+      - France Inter
+      - Mouv
+      - Rires & Chansons
+      - RTL2
+      - RTS
+      - Virgin Radio
+
+input_slider:
+  volume_denon:
+    name: 'Volume'
+    initial: 0.3
+    min: 0
+    max: 1
+    step: 0.01
+  miflora01_moisture_alert:
+    name: 'Moisture alert'
+    initial: 20
+    min: 0
+    max: 100
+    step: 5
+  miflora02_moisture_alert:
+    name: 'Moisture alert'
+    initial: 20
+    min: 0
+    max: 100
+    step: 5
+  miflora03_moisture_alert:
+    name: 'Moisture alert'
+    initial: 20
+    min: 0
+    max: 100
+    step: 5
+
 
 logbook:
   exclude:
+    domains:
+      - switch
+      - group
+      - sensor
+      - zwave
     entities:
-      - sensor.dark_sky_daily_high_temperature
-      - sensor.dark_sky_daily_low_temperature
-      - sensor.dark_sky_humidity
-      - sensor.dark_sky_precip
-      - sensor.dark_sky_precip_probability
-      - sensor.dark_sky_summary
-      - sensor.dark_sky_temperature
-      - sensor.time
-      - group.family_info
-      - group.family
+      - binary_sensor.aeotec_zw074_multisensor_gen5_sensor
+      - binary_sensor.aeotec_zw074_multisensor_gen5_sensor_2
+
+logger:
+  default: error
+  logs:
+    homeassistant: warn
+    homeassistant.core: error
+    homeassistant.bootstrap: error
+    homeassistant.components.http: error
+    homeassistant.components.api: error
+    homeassistant.components.recorder: error
+    homeassistant.components.media_player: fatal
+    homeassistant.components.device_tracker: error
+    DenonAVR: fatal
+    homeassistant.components.sensor.miplant: error
+    # homeassistant.components.statsd: error
+    # homeassistant.components.mqtt: error
+    # homeassistant.components.sensor.command_line: error
+    # homeassistant.components.zwave: error
+    # homeassistant.components.sensor.google_travel_time: error
+    # homeassistant.components.websocket_api: error
 
 # Checks for available updates
 updater:
+
 # Discover some devices automatically
 # discovery:
+
 # Enables support for tracking state changes over time.
 history:
-# View all events in a logbook
+  include:
+    entities:
+      - device_tracker.opo3tben_oneplus3tben
+      - device_tracker.opo3tln_oneplus3tln
+      - sensor.aeotec_zw074_multisensor_gen5_relative_humidity_2
+      - sensor.aeotec_zw074_multisensor_gen5_temperature_2
+      - sensor.schefflera_temperature
+      - sensor.citronnier_temperature
+      - sensor.citronnier_light_intensity
+      # - sensor.citronnier_moisture
+      # - sensor.citronnier_battery
+      - sensor.bens_phone_battery
+      - sensor.helenes_phone_battery
+      - sensor.dark_sky_temperature
+      - sensor.dark_sky_humidity
+      - sensor.dark_sky_precip_probability
+      - binary_sensor.aeotec_zw074_multisensor_gen5_sensor
+      - binary_sensor.aeotec_zw074_multisensor_gen5_sensor_2
+      - binary_sensor.someoneathome
+      # - sensor.aeotec_zw074_multisensor_gen5_luminance_2
+  exclude:
+    domains:
+      - weblink
+      - switch
+      - media_player
+      # - group
+      - remote
+      # - sensor
+      # - device_tracker
+      - script
+
+recorder:
+  purge_days: 3
+  exclude:
+    # domains:
+      # - device_tracker
+    entities:
+      - sensor.time
+      - sun.sun
+      - camera.home_camera
+      # - sensor.aeotec_zw074_multisensor_gen5_temperature_2
+      - sensor.aeotec_zw074_multisensor_gen5_relative_humidity_2
+      - sensor.aeotec_zw074_multisensor_gen5_sourcenodeid_2
+      - sensor.aeotec_zw074_multisensor_gen5_burglar_2
+      - sensor.aeotec_zw074_multisensor_gen5_luminance_2
+      - sensor.neo_coolcam_power_plug_12a_alarm_level
+      - sensor.neo_coolcam_power_plug_12a_alarm_level_2
+      - sensor.neo_coolcam_power_plug_12a_alarm_level_3
+      - sensor.neo_coolcam_power_plug_12a_alarm_level_4
+      - sensor.neo_coolcam_power_plug_12a_alarm_type
+      - sensor.neo_coolcam_power_plug_12a_alarm_type_2
+      - sensor.neo_coolcam_power_plug_12a_alarm_type_3
+      - sensor.neo_coolcam_power_plug_12a_alarm_type_4
+      - sensor.neo_coolcam_power_plug_12a_current
+      - sensor.neo_coolcam_power_plug_12a_current_2
+      - sensor.neo_coolcam_power_plug_12a_current_3
+      - sensor.neo_coolcam_power_plug_12a_current_4
+      - sensor.neo_coolcam_power_plug_12a_energy
+      - sensor.neo_coolcam_power_plug_12a_energy_2
+      - sensor.neo_coolcam_power_plug_12a_energy_3
+      - sensor.neo_coolcam_power_plug_12a_energy_4
+      - sensor.neo_coolcam_power_plug_12a_exporting
+      - sensor.neo_coolcam_power_plug_12a_exporting_2
+      - sensor.neo_coolcam_power_plug_12a_exporting_3
+      - sensor.neo_coolcam_power_plug_12a_exporting_4
+      - sensor.neo_coolcam_power_plug_12a_interval
+      - sensor.neo_coolcam_power_plug_12a_interval
+      - sensor.neo_coolcam_power_plug_12a_interval
+      - sensor.neo_coolcam_power_plug_12a_interval
+      - sensor.neo_coolcam_power_plug_12a_interval_2
+      - sensor.neo_coolcam_power_plug_12a_interval_2
+      - sensor.neo_coolcam_power_plug_12a_interval_2
+      - sensor.neo_coolcam_power_plug_12a_interval_2
+      - sensor.neo_coolcam_power_plug_12a_interval_3
+      - sensor.neo_coolcam_power_plug_12a_interval_3
+      - sensor.neo_coolcam_power_plug_12a_interval_3
+      - sensor.neo_coolcam_power_plug_12a_interval_3
+      - sensor.neo_coolcam_power_plug_12a_interval_4
+      - sensor.neo_coolcam_power_plug_12a_interval_4
+      - sensor.neo_coolcam_power_plug_12a_interval_4
+      - sensor.neo_coolcam_power_plug_12a_interval_4
+      - sensor.neo_coolcam_power_plug_12a_power
+      - sensor.neo_coolcam_power_plug_12a_power_2
+      - sensor.neo_coolcam_power_plug_12a_power_3
+      - sensor.neo_coolcam_power_plug_12a_power_4
+      - sensor.neo_coolcam_power_plug_12a_power_management
+      - sensor.neo_coolcam_power_plug_12a_power_management_2
+      - sensor.neo_coolcam_power_plug_12a_power_management_3
+      - sensor.neo_coolcam_power_plug_12a_power_management_4
+      - sensor.neo_coolcam_power_plug_12a_previous_reading
+      - sensor.neo_coolcam_power_plug_12a_previous_reading
+      - sensor.neo_coolcam_power_plug_12a_previous_reading
+      - sensor.neo_coolcam_power_plug_12a_previous_reading
+      - sensor.neo_coolcam_power_plug_12a_previous_reading_2
+      - sensor.neo_coolcam_power_plug_12a_previous_reading_2
+      - sensor.neo_coolcam_power_plug_12a_previous_reading_2
+      - sensor.neo_coolcam_power_plug_12a_previous_reading_2
+      - sensor.neo_coolcam_power_plug_12a_previous_reading_3
+      - sensor.neo_coolcam_power_plug_12a_previous_reading_3
+      - sensor.neo_coolcam_power_plug_12a_previous_reading_3
+      - sensor.neo_coolcam_power_plug_12a_previous_reading_3
+      - sensor.neo_coolcam_power_plug_12a_previous_reading_4
+      - sensor.neo_coolcam_power_plug_12a_previous_reading_4
+      - sensor.neo_coolcam_power_plug_12a_previous_reading_4
+      - sensor.neo_coolcam_power_plug_12a_previous_reading_4
+      - sensor.neo_coolcam_power_plug_12a_sourcenodeid
+      - sensor.neo_coolcam_power_plug_12a_sourcenodeid_2
+      - sensor.neo_coolcam_power_plug_12a_sourcenodeid_3
+      - sensor.neo_coolcam_power_plug_12a_sourcenodeid_4
+      - sensor.neo_coolcam_power_plug_12a_voltage
+      - sensor.neo_coolcam_power_plug_12a_voltage_2
+      - sensor.neo_coolcam_power_plug_12a_voltage_3
+      - sensor.neo_coolcam_power_plug_12a_voltage_4
+      - zwave.neo_coolcam_power_plug_12a
+      - zwave.neo_coolcam_power_plug_12a_2
+      - zwave.neo_coolcam_power_plug_12a_3
+      - zwave.neo_coolcam_power_plug_12a_4
+
 sun:
